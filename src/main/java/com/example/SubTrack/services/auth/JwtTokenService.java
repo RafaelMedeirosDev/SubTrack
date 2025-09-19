@@ -1,0 +1,62 @@
+package com.example.SubTrack.services.auth;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.example.SubTrack.shared.UserDetailsImpl;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+
+@Service
+public class JwtTokenService {
+
+    @Value("${JWT_SECRET}")
+    private String SECRET_KEY; // Chave secreta utilizada para gerar e verificar o token
+
+    @Value("${JWT_ISSUER}")
+    private String ISSUER; // Emissor do token
+
+    public String generateToken(UserDetailsImpl user) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+            return JWT.create()
+                    .withIssuer(ISSUER)
+                    .withSubject(user.getUsername())
+                    .withIssuedAt(Instant.now())
+                    .withExpiresAt(Instant.now().plusSeconds(7200))
+                    .sign(algorithm);
+        } catch (JWTCreationException exception){
+            throw new RuntimeException("Erro ao gerar o token JWT.", exception);
+        }
+    }
+
+    public String getSubjectFromToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+            return JWT.require(algorithm)
+                    .withIssuer(ISSUER)
+                    .build()
+                    .verify(token)
+                    .getSubject();
+        } catch (JWTVerificationException exception){
+            throw new JWTVerificationException("Token inválido ou expirado.");
+        }
+    }
+
+    private Instant creationDate() {
+        return ZonedDateTime.now(ZoneId.of("America/Recife")).toInstant();
+    }
+
+    private Instant expirationDate() {
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+    }
+
+}
