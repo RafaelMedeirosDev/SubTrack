@@ -19,6 +19,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.example.SubTrack.shared.constants.Constants;
+
 import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
@@ -28,15 +30,6 @@ public class SecurityConfiguration {
     @Autowired
     private UserAuthenticationFilter userAuthenticationFilter;
 
-    public static final String [] ENDPOINTS_WITHOUT_AUTHENTICATION = {
-            "/auth/login",
-            "/auth/register"
-    };
-    public static final String [] ENDPOINTS_WITH_AUTHENTICATION = {
-            "/auth/me",
-    };
-
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -44,8 +37,8 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(ENDPOINTS_WITHOUT_AUTHENTICATION).permitAll()
-                        .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION).authenticated()
+                        .requestMatchers(Constants.ENDPOINTS_WITHOUT_AUTHENTICATION).permitAll()
+                        .requestMatchers(Constants.ENDPOINTS_WITH_AUTHENTICATION).authenticated()
                         .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex
                     .authenticationEntryPoint((req, res, e) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED))
