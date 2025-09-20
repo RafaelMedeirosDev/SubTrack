@@ -2,6 +2,7 @@ package com.example.SubTrack.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 @Entity
 @Table(name = "subscriptions")
 public class Subscription {
@@ -18,7 +20,7 @@ public class Subscription {
     @Column(name = "platform_name")
     private String platformName;
     @Column(name = "user_id")
-    private String userId;
+    private UUID userId;
     @Column
     private String value;
     @Column(name = "billing_date")
