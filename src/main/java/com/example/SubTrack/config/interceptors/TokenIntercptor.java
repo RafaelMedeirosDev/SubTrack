@@ -1,6 +1,8 @@
 package com.example.SubTrack.config.interceptors;
 
 import com.example.SubTrack.services.auth.JwtTokenService;
+import com.example.SubTrack.shared.dtos.TokenDataDTO;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
@@ -24,7 +26,16 @@ public class TokenIntercptor implements HandlerInterceptor {
         }
 
         try {
-            //validar token
+            if(!this.tokenService.validateToken(token)) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return false;
+            }
+            TokenDataDTO tokenData = new TokenDataDTO(this.tokenService.getSubjectFromToken(token));
+            request.setAttribute("tokenData", tokenData);
+            return true;
+        } catch (RuntimeException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return false;
         }
     }
 }
