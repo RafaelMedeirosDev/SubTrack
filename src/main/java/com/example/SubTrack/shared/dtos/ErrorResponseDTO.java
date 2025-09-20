@@ -28,7 +28,6 @@ public class ErrorResponseDTO {
         if (statusCode instanceof HttpStatus hs) {
             reason = hs.getReasonPhrase();
         } else {
-            // fallback: mapeia pelo código
             reason = HttpStatus.valueOf(code).getReasonPhrase();
         }
         return new ErrorResponseDTO(code, reason, message, path);
