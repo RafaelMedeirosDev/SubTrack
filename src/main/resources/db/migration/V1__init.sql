@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS subscriptions (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    plataform_name VARCHAR(100) NOT NULL,
+    platform_name VARCHAR(100) NOT NULL,
     user_id uuid REFERENCES users(id),
     value DECIMAL(10, 2) NOT NULL,
     billing_date DATE NOT NULL

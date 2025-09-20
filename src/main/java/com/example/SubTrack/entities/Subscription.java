@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
@@ -22,7 +23,14 @@ public class Subscription {
     @Column(name = "user_id")
     private UUID userId;
     @Column
-    private String value;
+    private BigDecimal value;
     @Column(name = "billing_date")
     private Date billingDate;
+
+    public Subscription(String platformName, BigDecimal value, Date billingDate, UUID userId) {
+        this.platformName = platformName;
+        this.value = value;
+        this.billingDate = billingDate;
+        this.userId = userId;
+    }
 }
