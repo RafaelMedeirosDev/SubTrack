@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.SubTrack.shared.UserDetailsImpl;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -44,10 +45,24 @@ public class JwtTokenService {
             return JWT.require(algorithm)
                     .withIssuer(ISSUER)
                     .build()
-                    .verify(token)
+                    .verify(token.replace("Bearer ", ""))
                     .getSubject();
         } catch (JWTVerificationException exception){
             throw new JWTVerificationException("Token inválido ou expirado.");
+        }
+    }
+
+    // @Bean
+    public boolean validateToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+            JWT.require(algorithm)
+                    .withIssuer(ISSUER)
+                    .build()
+                    .verify(token.replace("Bearer ", ""));
+            return true;
+        } catch (JWTVerificationException exception){
+            return false;
         }
     }
 
