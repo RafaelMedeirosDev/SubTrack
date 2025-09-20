@@ -30,7 +30,9 @@ public class TokenIntercptor implements HandlerInterceptor {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return false;
             }
-            TokenDataDTO tokenData = new TokenDataDTO(this.tokenService.getSubjectFromToken(token));
+            TokenDataDTO tokenData = new TokenDataDTO(this.tokenService.getSubjectFromToken(token), 
+                    this.tokenService.getIdFromToken(token),
+                    this.tokenService.getNameFromToken(token));
             request.setAttribute("tokenData", tokenData);
             return true;
         } catch (RuntimeException e) {

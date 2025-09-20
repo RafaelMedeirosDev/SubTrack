@@ -7,7 +7,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.SubTrack.shared.UserDetailsImpl;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -20,10 +19,10 @@ import java.time.ZonedDateTime;
 public class JwtTokenService {
 
     @Value("${JWT_SECRET}")
-    private String SECRET_KEY; // Chave secreta utilizada para gerar e verificar o token
+    private String SECRET_KEY;
 
     @Value("${JWT_ISSUER}")
-    private String ISSUER; // Emissor do token
+    private String ISSUER;
 
     public String generateToken(UserDetailsImpl user) {
         try {
@@ -31,6 +30,8 @@ public class JwtTokenService {
             return JWT.create()
                     .withIssuer(ISSUER)
                     .withSubject(user.getUsername())
+                    .withClaim("id", user.getUser().getId().toString())
+                    .withClaim("name", user.getUser().getName())
                     .withIssuedAt(Instant.now())
                     .withExpiresAt(Instant.now().plusSeconds(7200))
                     .sign(algorithm);
@@ -47,6 +48,32 @@ public class JwtTokenService {
                     .build()
                     .verify(token.replace("Bearer ", ""))
                     .getSubject();
+        } catch (JWTVerificationException exception){
+            throw new JWTVerificationException("Token inválido ou expirado.");
+        }
+    }
+
+    public String getNameFromToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+            return JWT.require(algorithm)
+                    .withIssuer(ISSUER)
+                    .build()
+                    .verify(token.replace("Bearer ", ""))
+                    .getClaim("name").asString();
+        } catch (JWTVerificationException exception){
+            throw new JWTVerificationException("Token inválido ou expirado.");
+        }
+    }
+
+    public String getIdFromToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+            return JWT.require(algorithm)
+                    .withIssuer(ISSUER)
+                    .build()
+                    .verify(token.replace("Bearer ", ""))
+                    .getClaim("id").asString();
         } catch (JWTVerificationException exception){
             throw new JWTVerificationException("Token inválido ou expirado.");
         }
