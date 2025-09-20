@@ -12,7 +12,6 @@ import com.example.SubTrack.shared.UserDetailsImpl;
 import com.example.SubTrack.shared.dtos.LoginResponseDto;
 import com.example.SubTrack.shared.dtos.LoginUserDTO;
 
-import lombok.var;
 
 @Service
 public class LoginService {

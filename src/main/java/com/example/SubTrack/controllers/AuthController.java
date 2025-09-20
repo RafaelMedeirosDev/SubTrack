@@ -1,5 +1,6 @@
 package com.example.SubTrack.controllers;
 
+import com.example.SubTrack.shared.dtos.TokenDataDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -35,6 +36,12 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@Validated @RequestBody CreateUserDTO body) throws Exception{
+        User response = this.createUserService.execute(body);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/me")
+    public ResponseEntity<TokenDataDTO> me(@Validated @RequestBody CreateUserDTO body) throws Exception{
         User response = this.createUserService.execute(body);
         return ResponseEntity.ok(response);
     }
