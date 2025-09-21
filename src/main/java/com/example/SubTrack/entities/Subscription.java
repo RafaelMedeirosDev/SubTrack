@@ -4,14 +4,16 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
 @Table(name = "subscriptions")
 public class Subscription {
@@ -25,9 +27,9 @@ public class Subscription {
     @Column
     private BigDecimal value;
     @Column(name = "billing_date")
-    private Date billingDate;
+    private LocalDate billingDate;
 
-    public Subscription(String platformName, BigDecimal value, Date billingDate, UUID userId) {
+    public Subscription(String platformName, BigDecimal value, LocalDate billingDate, UUID userId) {
         this.platformName = platformName;
         this.value = value;
         this.billingDate = billingDate;

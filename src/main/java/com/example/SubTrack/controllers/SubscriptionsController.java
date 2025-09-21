@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -16,8 +17,10 @@ import com.example.SubTrack.entities.Subscription;
 import com.example.SubTrack.repositories.SubscriptionRepository;
 import com.example.SubTrack.services.subscriptions.CreateSubscriptionService;
 import com.example.SubTrack.services.subscriptions.FindOneSubscriptionService;
+import com.example.SubTrack.services.subscriptions.UpdateSubscriptionService;
 import com.example.SubTrack.shared.dtos.CreateSubscriptionDto;
 import com.example.SubTrack.shared.dtos.TokenDataDTO;
+import com.example.SubTrack.shared.dtos.UpdateSubscriptionDto;
 
 @RestController
 @RequestMapping("/subscriptions")
@@ -28,7 +31,8 @@ public class SubscriptionsController {
   private FindOneSubscriptionService findOneSubscriptionService;
   @Autowired
   private CreateSubscriptionService CreateSubscriptionService;
-  
+  @Autowired
+  private UpdateSubscriptionService updateSubscriptionService;
   @GetMapping("")
   public List<Subscription> get(@RequestAttribute("tokenData") TokenDataDTO tokenData) {
     return this.subscriptionRepository.getSubscriptionsByUserId(UUID.fromString(tokenData.id()));
@@ -42,5 +46,10 @@ public class SubscriptionsController {
   @PostMapping()
   public Subscription register(@RequestBody CreateSubscriptionDto body, @RequestAttribute("tokenData") TokenDataDTO tokenData) {
     return this.CreateSubscriptionService.execute(body, UUID.fromString(tokenData.id()));
+  }
+
+  @PatchMapping("/{id}")
+  public Subscription update(@PathVariable("id") UUID id,@RequestBody UpdateSubscriptionDto body, @RequestAttribute("tokenData") TokenDataDTO tokenData){
+    return this.updateSubscriptionService.execute(id, body, UUID.fromString(tokenData.id()));
   }
 }

@@ -2,7 +2,6 @@ package com.example.SubTrack.controllers;
 
 import com.example.SubTrack.shared.dtos.TokenDataDTO;
 
-import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.SubTrack.entities.User;
-import com.example.SubTrack.repositories.UserRepository;
 import com.example.SubTrack.services.CreateUserService;
 import com.example.SubTrack.services.auth.LoginService;
 import com.example.SubTrack.shared.dtos.CreateUserDTO;
