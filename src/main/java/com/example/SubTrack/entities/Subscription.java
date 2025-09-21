@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -26,13 +25,13 @@ public class Subscription {
     private UUID userId;
     @Column
     private BigDecimal value;
-    @Column(name = "billing_date")
-    private LocalDate billingDate;
+    @Column(name = "billing_day")
+    private int billingDay;
 
-    public Subscription(String platformName, BigDecimal value, LocalDate billingDate, UUID userId) {
+    public Subscription(String platformName, BigDecimal value, int billingDay, UUID userId) {
         this.platformName = platformName;
         this.value = value;
-        this.billingDate = billingDate;
+        this.billingDay = billingDay;
         this.userId = userId;
     }
 }

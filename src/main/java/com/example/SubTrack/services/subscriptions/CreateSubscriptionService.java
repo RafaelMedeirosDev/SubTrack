@@ -1,7 +1,5 @@
 package com.example.SubTrack.services.subscriptions;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.UUID;
 
 
@@ -20,15 +18,12 @@ public class CreateSubscriptionService {
 
     public Subscription execute(CreateSubscriptionDto data, UUID userId){
 
-        LocalDate billingDate = adjustDate(data.billingDate());
-        Subscription subscription = new Subscription(data.platformName(), data.value(), billingDate, userId);
+        int day = adjustDay(data.billingDay());
+        Subscription subscription = new Subscription(data.platformName(), data.value(), day, userId);
         return this.subscriptionRepository.save(subscription);
     }
 
-    private LocalDate adjustDate (LocalDate billingDate){
-        YearMonth yearMonth = YearMonth.of(billingDate.getYear(), billingDate.getMonth());
-        int lastDay = yearMonth.lengthOfMonth();
-        int day = Math.min(billingDate.getDayOfMonth(), lastDay);
-        return LocalDate.of(billingDate.getYear(), billingDate.getMonth(), day);
+    private int adjustDay (int day){
+        return Math.min(day, 31);
     }
 }

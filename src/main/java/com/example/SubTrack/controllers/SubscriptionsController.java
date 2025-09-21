@@ -32,7 +32,7 @@ public class SubscriptionsController {
   @Autowired
   private FindOneSubscriptionService findOneSubscriptionService;
   @Autowired
-  private CreateSubscriptionService CreateSubscriptionService;
+  private CreateSubscriptionService createSubscriptionService;
   @Autowired
   private UpdateSubscriptionService updateSubscriptionService;
   @Autowired
@@ -49,7 +49,7 @@ public class SubscriptionsController {
 
   @PostMapping()
   public Subscription register(@RequestBody CreateSubscriptionDto body, @RequestAttribute("tokenData") TokenDataDTO tokenData) {
-    return this.CreateSubscriptionService.execute(body, UUID.fromString(tokenData.id()));
+    return this.createSubscriptionService.execute(body, UUID.fromString(tokenData.id()));
   }
 
   @PatchMapping("/{id}")

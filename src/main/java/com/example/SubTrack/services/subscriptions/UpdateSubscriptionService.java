@@ -1,7 +1,6 @@
 package com.example.SubTrack.services.subscriptions;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
+
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +26,15 @@ public class UpdateSubscriptionService {
             subscription.setValue(data.value());
         }
 
-        if(data.billingDate() != null) {
-            subscription.setBillingDate(adjustDate(data.billingDate()));
+        if(data.billingDay() != null) {
+            subscription.setBillingDay(adjustDay(data.billingDay()));
         }
         
 
         return subscriptionRepository.save(subscription);
     }
 
-    private LocalDate adjustDate(LocalDate billingDate) {
-        YearMonth yearMonth = YearMonth.of(billingDate.getYear(), billingDate.getMonth());
-        int lastDay = yearMonth.lengthOfMonth();
-        int day = Math.min(billingDate.getDayOfMonth(), lastDay);
-        return LocalDate.of(billingDate.getYear(), billingDate.getMonth(), day);
+    private int adjustDay(int billingDay) {
+        return Math.min(billingDay, 31);
     }
 }
