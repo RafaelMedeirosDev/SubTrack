@@ -10,5 +10,5 @@ CREATE TABLE IF NOT EXISTS subscriptions (
     platform_name VARCHAR(100) NOT NULL,
     user_id uuid REFERENCES users(id),
     value DECIMAL(10, 2) NOT NULL,
-    billing_date INT NOT NULL
+    billing_day INT NOT NULL
 );
