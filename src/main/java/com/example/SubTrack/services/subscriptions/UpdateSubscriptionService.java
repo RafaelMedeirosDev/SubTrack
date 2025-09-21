@@ -27,14 +27,12 @@ public class UpdateSubscriptionService {
         }
 
         if(data.billingDay() != null) {
-            subscription.setBillingDay(adjustDay(data.billingDay()));
+            subscription.setBillingDay(data.billingDay());
         }
         
 
         return subscriptionRepository.save(subscription);
     }
 
-    private int adjustDay(int billingDay) {
-        return Math.min(billingDay, 31);
-    }
+    
 }

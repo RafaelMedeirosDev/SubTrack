@@ -31,7 +31,15 @@ public class Subscription {
     public Subscription(String platformName, BigDecimal value, int billingDay, UUID userId) {
         this.platformName = platformName;
         this.value = value;
-        this.billingDay = billingDay;
+        this.billingDay = adjustDay(billingDay);
         this.userId = userId;
+    }
+
+    public void setBillingDay(int billingDay) {
+        this.billingDay = adjustDay(billingDay);
+    }
+
+    private int adjustDay(int billingDay) {
+        return Math.min(billingDay, 31);
     }
 }

@@ -18,12 +18,9 @@ public class CreateSubscriptionService {
 
     public Subscription execute(CreateSubscriptionDto data, UUID userId){
 
-        int day = adjustDay(data.billingDay());
-        Subscription subscription = new Subscription(data.platformName(), data.value(), day, userId);
+        
+        Subscription subscription = new Subscription(data.platformName(), data.value(), data.billingDay(), userId);
         return this.subscriptionRepository.save(subscription);
     }
 
-    private int adjustDay (int day){
-        return Math.min(day, 31);
-    }
 }
