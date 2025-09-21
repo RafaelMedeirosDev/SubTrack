@@ -16,14 +16,12 @@ public class UpdateSubscriptionService {
 
     @Autowired
     private SubscriptionRepository subscriptionRepository;
+    @Autowired
+    private FindOneSubscriptionService findOneSubscriptionService;
 
     public Subscription execute(UUID id, UpdateSubscriptionDto data, UUID userId) {
-        Subscription subscription = subscriptionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Subscription not found or access denied"));
-
-        if(!subscription.getUserId().equals(userId)) {
-            throw new RuntimeException("Subscription not found or access denied");
-        }
+        
+        Subscription subscription = findOneSubscriptionService.execute(id, userId);
 
         if(data.value() != null) {
             subscription.setValue(data.value());
