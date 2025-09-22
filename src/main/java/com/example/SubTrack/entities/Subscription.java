@@ -4,13 +4,15 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.Date;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
 @Table(name = "subscriptions")
 public class Subscription {
@@ -22,7 +24,22 @@ public class Subscription {
     @Column(name = "user_id")
     private UUID userId;
     @Column
-    private String value;
-    @Column(name = "billing_date")
-    private Date billingDate;
+    private BigDecimal value;
+    @Column(name = "billing_day")
+    private int billingDay;
+
+    public Subscription(String platformName, BigDecimal value, int billingDay, UUID userId) {
+        this.platformName = platformName;
+        this.value = value;
+        this.billingDay = adjustDay(billingDay);
+        this.userId = userId;
+    }
+
+    public void setBillingDay(int billingDay) {
+        this.billingDay = adjustDay(billingDay);
+    }
+
+    private int adjustDay(int billingDay) {
+        return Math.min(billingDay, 31);
+    }
 }
