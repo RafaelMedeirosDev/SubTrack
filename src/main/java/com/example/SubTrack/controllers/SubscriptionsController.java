@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,6 +22,7 @@ import com.example.SubTrack.repositories.SubscriptionRepository;
 import com.example.SubTrack.services.subscriptions.CreateSubscriptionService;
 import com.example.SubTrack.services.subscriptions.DeleteSubscriptionService;
 import com.example.SubTrack.services.subscriptions.FindOneSubscriptionService;
+import com.example.SubTrack.services.subscriptions.ListSubscriptionService;
 import com.example.SubTrack.services.subscriptions.UpdateSubscriptionService;
 import com.example.SubTrack.shared.dtos.CreateSubscriptionDto;
 import com.example.SubTrack.shared.dtos.TokenDataDTO;
@@ -37,9 +41,14 @@ public class SubscriptionsController {
   private UpdateSubscriptionService updateSubscriptionService;
   @Autowired
   private DeleteSubscriptionService deleteSubscriptionService;
+  @Autowired
+  private ListSubscriptionService listSubscriptionService;
+  
+
   @GetMapping("")
-  public List<Subscription> get(@RequestAttribute("tokenData") TokenDataDTO tokenData) {
-    return this.subscriptionRepository.getSubscriptionsByUserId(UUID.fromString(tokenData.id()));
+  public ResponseEntity<Page<Subscription>> list(@RequestAttribute("tokenData") TokenDataDTO tokenData, Pageable pageable) {
+    Page<Subscription> subscriptions = listSubscriptionService.execute(UUID.fromString(tokenData.id()), pageable);
+    return ResponseEntity.ok(subscriptions);
   }
 
   @GetMapping("/{id}")
